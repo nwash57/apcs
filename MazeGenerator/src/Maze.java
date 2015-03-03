@@ -64,10 +64,11 @@ public class Maze
             fillGrid();
         }
 
-        while (hasPathWithXAdjacentPaths(2))
-        {
-            fillExtraPath();
-        }
+	    if (!hasOpenSpace())
+	        while (hasPathWithXAdjacentPaths(2))
+	        {
+	            fillExtraPath();
+	        }
     }
 
     private void selectNewHead()
@@ -167,10 +168,14 @@ public class Maze
         {
             for (int x = 0; x < width; x++)
             {
-                Point p = new Point(x, y, grid);
+	            Point p = new Point(x, y, grid);
+                System.out.println("test: " + p.getUp());
 
-                if (hasMoreThanXAdjacentPaths(p, num) && p.getType() == 2)
-                    b = true;
+	            if (hasMoreThanXAdjacentPaths(p, num) && p.getType() == 2)
+	            {
+		            b = true;
+		            break;
+	            }
             }
         }
 
@@ -244,6 +249,7 @@ public class Maze
 
     private boolean hasMoreThanXAdjacentPaths(Point p, int num)
     {
+        System.out.println("test: " + p.getUp());
         boolean b = false;
         int pathTiles = 0;
         int x = p.getX();
@@ -254,85 +260,85 @@ public class Maze
         ////////////////////////////////////////////////
         if (x > 0 && x < width - 1 && y > 0 && y < height - 1)
         {
-            if (p.getRight() == 0)
+            if (p.getRight() == 2)
                 pathTiles++;
-            if (p.getLeft() == 0)
+            if (p.getLeft() == 2)
                 pathTiles++;
-            if (p.getUp() == 0)
+            if (p.getUp() == 2)
                 pathTiles++;
-            if (p.getDown() == 0)
+            if (p.getDown() == 2)
                 pathTiles++;
         }
 
         ////////////////////////////////////////////////
         //ANY SPACE THAT IS A SIDE && NOT A CORNER
         ////////////////////////////////////////////////
-        else if (y == 0 && x > 0 && x < width - 1)
+        if (y == 0 && x > 0 && x < width - 1)
         {
-            if (p.getDown() == 0)
+            if (p.getDown() == 2)
                 pathTiles++;
-            if (p.getRight() == 0)
+            if (p.getRight() == 2)
                 pathTiles++;
-            if (p.getLeft() == 0)
+            if (p.getLeft() == 2)
                 pathTiles++;
         }
-        else if (x == 0 && y > 0 && y < height - 1)
+        if (x == 0 && y > 0 && y < height - 1)
         {
-            if (p.getRight() == 0)
+            if (p.getRight() == 2)
                 pathTiles++;
-            if (p.getUp() == 0)
+            if (p.getUp() == 2)
                 pathTiles++;
-            if (p.getDown() == 0)
+            if (p.getDown() == 2)
                 pathTiles++;
         }
-        else if (y == height - 1 && x > 0 && x < width - 1)
+        if (y == height - 1 && x > 0 && x < width - 1)
         {
-            if (p.getUp() == 0)
+            if (p.getUp() == 2)
                 pathTiles++;
-            if (p.getRight() == 0)
+            if (p.getRight() == 2)
                 pathTiles++;
-            if (p.getLeft() == 0)
+            if (p.getLeft() == 2)
                 pathTiles++;
         }
-        else if (x == width - 1 && y > 0 && y < height - 1)
+        if (x == width - 1 && y > 0 && y < height - 1)
         {
-            if (p.getLeft() == 0)
+            if (p.getLeft() == 2)
                 pathTiles++;
-            if (p.getDown() == 0)
+            if (p.getDown() == 2)
                 pathTiles++;
-            if (p.getUp() == 0)
+            if (p.getUp() == 2)
                 pathTiles++;
         }
 
         ////////////////////////////////////////////////
         //ANY SPACE THAT IS ONLY A CORNER
         ////////////////////////////////////////////////
-        else if (x == 0 && y == 0)
+        if (x == 0 && y == 0)
         {
-            if (p.getRight() == 0)
+            if (p.getRight() == 2)
                 pathTiles++;
-            if (p.getDown() == 0)
+            if (p.getDown() == 2)
                 pathTiles++;
         }
-        else if (x == 0 && y == height - 1)
+        if (x == 0 && y == height - 1)
         {
-            if (p.getRight() == 0 || p.getUp() == 0)
+            if (p.getRight() == 2 || p.getUp() == 2)
                 pathTiles++;
-            if (p.getUp() == 0)
+            if (p.getUp() == 2)
                 pathTiles++;
         }
-        else if (x == width - 1 && y == 0)
+        if (x == width - 1 && y == 0)
         {
-            if (p.getLeft() == 0 || p.getDown() == 0)
+            if (p.getLeft() == 2 || p.getDown() == 2)
                 pathTiles++;
-            if (p.getDown() == 0)
+            if (p.getDown() == 2)
                 pathTiles++;
         }
-        else if (x == width - 1 && y == height - 1)
+        if (x == width - 1 && y == height - 1)
         {
-            if (p.getLeft() == 0 || p.getUp() == 0)
+            if (p.getLeft() == 2 || p.getUp() == 2)
                 pathTiles++;
-            if (p.getUp() == 0)
+            if (p.getUp() == 2)
                 pathTiles++;
         }
 
@@ -352,56 +358,49 @@ public class Maze
         ////////////////////////////////////////////////
         if (x > 0 && x < width - 1 && y > 0 && y < height - 1)
         {
-            if (p.getRight() == 3 && p.getDown() == 3 && p.getLeft() != 3 && p.getUp() != 0 && grid[x - 1][y - 1] == 2)
+            if (p.getRight() == 3 && p.getDown() == 3 && p.getLeft() != 3 && p.getUpLeft() == 2)
                 b = true;
-            else if (p.getRight() != 3 && p.getDown() == 3 && p.getLeft() == 3 && p.getUp() != 0 && grid[x + 1][y - 1] == 2)
+            else if (p.getRight() != 3 && p.getDown() == 3 && p.getLeft() == 3 && p.getUpRight() == 2)
                 b = true;
-            else if (p.getRight() == 3 && p.getDown() != 3 && p.getLeft() != 3 && p.getUp() == 0 && grid[x - 1][y + 1] == 2)
+            else if (p.getRight() == 3 && p.getDown() != 3 && p.getLeft() != 3 && p.getDownLeft() == 2)
                 b = true;
-            else if (p.getRight() != 3 && p.getDown() != 3 && p.getLeft() == 3 && p.getUp() == 0 && grid[x + 1][y + 1] == 2)
+            else if (p.getRight() != 3 && p.getDown() != 3 && p.getLeft() == 3 && p.getDownRight() == 2)
                 b = true;
         }
 
-//        ////////////////////////////////////////////////
-//        //ANY SPACE THAT IS A SIDE && NOT A CORNER
-//        ////////////////////////////////////////////////
-//        else if (y == 0 && x > 0 && x < width - 1)
-//        {
-//            if (p.getDown() == 0)
-//                pathTiles++;
-//            if (p.getRight() == 0)
-//                pathTiles++;
-//            if (p.getLeft() == 0)
-//                pathTiles++;
-//        }
-//        else if (x == 0 && y > 0 && y < height - 1)
-//        {
-//            if (p.getRight() == 0)
-//                pathTiles++;
-//            if (p.getUp() == 0)
-//                pathTiles++;
-//            if (p.getDown() == 0)
-//                pathTiles++;
-//        }
-//        else if (y == height - 1 && x > 0 && x < width - 1)
-//        {
-//            if (p.getUp() == 0)
-//                pathTiles++;
-//            if (p.getRight() == 0)
-//                pathTiles++;
-//            if (p.getLeft() == 0)
-//                pathTiles++;
-//        }
-//        else if (x == width - 1 && y > 0 && y < height - 1)
-//        {
-//            if (p.getLeft() == 0)
-//                pathTiles++;
-//            if (p.getDown() == 0)
-//                pathTiles++;
-//            if (p.getUp() == 0)
-//                pathTiles++;
-//        }
-//
+        ////////////////////////////////////////////////
+        //ANY SPACE THAT IS A SIDE && NOT A CORNER
+        ////////////////////////////////////////////////
+        else if (y == 0 && x > 0 && x < width - 1)
+        {
+            if (p.getLeft() == 3 && p.getRight() != 3 && p.getDownRight() == 2)
+                b = true;
+            else if (p.getLeft() != 3 && p.getRight() == 3 && p.getDownLeft() == 2)
+                b = true;
+        }
+        else if (x == 0 && y > 0 && y < height - 1)
+        {
+            if (p.getUp() == 3 && p.getDown() != 3 && p.getDownRight() == 2)
+                b = true;
+            else if (p.getDown() == 3 && p.getUp() != 3 && p.getUpRight() == 2)
+                b = true;
+
+        }
+        else if (y == height - 1 && x > 0 && x < width - 1)
+        {
+            if (p.getLeft() == 3 && p.getRight() != 3 && p.getUpRight() == 2)
+                b = true;
+            else if (p.getLeft() != 3 && p.getRight() == 3 && p.getUpLeft() == 2)
+                b = true;
+        }
+        else if (x == width - 1 && y > 0 && y < height - 1)
+        {
+            if (p.getUp() == 3 && p.getDown() != 3 && p.getDownLeft() == 2)
+                b = true;
+            else if (p.getDown() == 3 && p.getUp() != 3 && p.getUpLeft() == 2)
+                b = true;
+        }
+
         ////////////////////////////////////////////////
         //ANY SPACE THAT IS ONLY A CORNER
         ////////////////////////////////////////////////
