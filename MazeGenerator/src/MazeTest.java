@@ -5,7 +5,6 @@ public class MazeTest
         Maze m = new Maze(16, 16);
         m.generateGrid();
         m.fillGrid();
-        m.printMaze();
 	    m.fillExtraPath();
 	    m.fillOpen();
 	    m.printMaze();

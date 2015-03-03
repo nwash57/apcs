@@ -33,7 +33,6 @@ public class Path
 
         while (generating && !isTrapped())
         {
-            //maze.printMaze();
             move();
             setGenerating();
         }

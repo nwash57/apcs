@@ -64,7 +64,6 @@ public class Maze
 		    if (hasOpenSpace())
 		    {
 			    selectNewHead();
-			    printMaze();
 			    if (curLoc != null)
 			        fillGrid();
 		    }
@@ -115,7 +114,6 @@ public class Maze
 		    grid[curLoc.getX()][curLoc.getY()] = 2;
 	    }
 
-	    System.out.println("test" + invalidPoints.size() + " " + wallCount());
 	    if (invalidPoints.size() == wallCount())
 		    curLoc = null;
     }
@@ -205,8 +203,6 @@ public class Maze
 
     private boolean hasPathWithXAdjacentPaths(int num)
     {
-        printMaze();
-
         boolean b = false;
 
         for (int y = 0; y < height; y++)
