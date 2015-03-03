@@ -1,5 +1,3 @@
-//this is a git test
-
 public class MazeTest
 {
     public static void main(String[] args)
