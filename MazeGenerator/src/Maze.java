@@ -55,45 +55,72 @@ public class Maze
 
     public void fillGrid()
     {
-        Path path = new Path(curLoc, width, height, grid, this);
-        path.generateRandomPath();
+	    try
+	    {
+		    Path path = new Path(curLoc, width, height, grid, this);
+            path.generateRandomPath();
 
-        if (hasOpenSpace())
+
+		    if (hasOpenSpace())
+		    {
+			    selectNewHead();
+			    printMaze();
+			    if (curLoc != null)
+			        fillGrid();
+		    }
+	    }
+        catch (Exception e)
         {
-            selectNewHead();
-            fillGrid();
+	        System.out.println("ERROR IN METHOD fillGrid()");
         }
-
-	    if (!hasOpenSpace())
-	        while (hasPathWithXAdjacentPaths(2))
-	        {
-	            fillExtraPath();
-	        }
     }
+
+	public void fillOpen()
+	{
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				Point p = new Point(x, y, grid);
+
+				if (p.getType() == 0)
+					grid[p.getX()][p.getY()] = 3;
+			}
+		}
+	}
 
     private void selectNewHead()
     {
-        ArrayList<Point> validPoints = new ArrayList<Point>();
+	    ArrayList<Point> validPoints = new ArrayList<Point>();
+	    ArrayList<Point> invalidPoints = new ArrayList<Point>();
 
-        for (int h = 0; h < height; h++)
-        {
-            for (int w = 0; w < width; w++)
-            {
-                Point p = new Point(w, h, grid);
+	    for (int h = 0; h < height; h++)
+	    {
+		    for (int w = 0; w < width; w++)
+		    {
+			    Point p = new Point(w, h, grid);
 
-                if (hasAdjacentOpen(p) && !hasMoreThanXAdjacentPaths(p, 1) && !hasAdjacentStart(p) && grid[p.getX()][p.getY()] == 3)
-                {
-                    validPoints.add(p);
-                }
+			    if (hasAdjacentOpen(p) && !hasMoreThanXAdjacentPaths(p, 1) && !hasAdjacentStart(p) && p.getType() == 3)
+			    {
+				    validPoints.add(p);
+			    }
+			    else if (p.getType() == 3)
+				    invalidPoints.add(p);
+		    }
+	    }
 
-            }
-        }
+	    if (validPoints.size() > 0)
+	    {
+		    curLoc = validPoints.get(rand.nextInt(validPoints.size()));
+		    grid[curLoc.getX()][curLoc.getY()] = 2;
+	    }
 
-        curLoc = validPoints.get(rand.nextInt(validPoints.size()));
-        grid[curLoc.getX()][curLoc.getY()] = 2;
+	    System.out.println("test" + invalidPoints.size() + " " + wallCount());
+	    if (invalidPoints.size() == wallCount())
+		    curLoc = null;
     }
 
-    private void fillExtraPath()
+    public void fillExtraPath()
     {
         for (int h = 0; h < height; h++)
         {
@@ -123,7 +150,7 @@ public class Maze
                         System.out.print(Colors.GREEN + "\t$" + Colors.RESET);
                         break;
                     case 0:
-                        System.out.print(Colors.BLACK + "\t." + Colors.RESET);
+                        System.out.print(Colors.WHITE + "\t." + Colors.RESET);
                         break;
                     case 1:
                         System.out.print(Colors.PURPLE + "\t@" + Colors.RESET);
@@ -157,6 +184,24 @@ public class Maze
         }
         return b;
     }
+
+	private int wallCount()
+	{
+		int numWalls = 0;
+
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				Point p = new Point(x, y, grid);
+
+				if (p.getType() == 3)
+					numWalls++;
+			}
+		}
+
+		return numWalls;
+	}
 
     private boolean hasPathWithXAdjacentPaths(int num)
     {
@@ -249,7 +294,6 @@ public class Maze
 
     private boolean hasMoreThanXAdjacentPaths(Point p, int num)
     {
-        System.out.println("test: " + p.getUp());
         boolean b = false;
         int pathTiles = 0;
         int x = p.getX();
