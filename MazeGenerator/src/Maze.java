@@ -21,13 +21,20 @@ public class Maze
     private Random rand = new Random();
     private int[][] grid;
     private int width, height;
+	private int pathLength;
     private Point curLoc;
 
-    public Maze(int iWidth, int iHeight)
+	private boolean debug, toTxt, toPng;
+
+    public Maze(int iWidth, int iHeight, int iPathLength, boolean d, boolean txt, boolean png)
     {
         width = iWidth;
         height = iHeight;
+	    pathLength = iPathLength;
         grid = new int[width][height];
+	    debug = d;
+	    toTxt = txt;
+	    toPng = png;
     }
 
     public void generateGrid()
@@ -64,7 +71,7 @@ public class Maze
     {
 	    try
 	    {
-		    Path path = new Path(curLoc, width, height, grid, this);
+		    Path path = new Path(curLoc, width, height, pathLength, grid, this, debug, toTxt, toPng);
             path.generateRandomPath();
 
 

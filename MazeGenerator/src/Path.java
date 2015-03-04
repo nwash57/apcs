@@ -4,12 +4,13 @@ public class Path
 {
     private Random rand = new Random();
     private Maze maze;
-    private int length, lastDir, height, width;
+    private int length, maxLength, lastDir, height, width;
     private int curLocX, curLocY;
     private boolean generating;
     private int[][] grid;
+	private boolean debug, toTxt, toPng;
 
-    public Path(Point head, int gridWidth, int gridHeight, int[][] iGrid, Maze m)
+    public Path(Point head, int gridWidth, int gridHeight, int ml, int[][] iGrid, Maze m, boolean d, boolean txt, boolean png)
     {
         maze = m;
         curLocX = head.getX();
@@ -20,6 +21,10 @@ public class Path
         grid = iGrid;
         height = gridHeight;
         width = gridWidth;
+	    maxLength = ml;
+	    debug = d;
+	    toTxt = txt;
+	    toPng = png;
     }
 
     /* DIRECTION KEY
@@ -39,7 +44,6 @@ public class Path
     }
 
     private void move() {
-        maze.printMazeToImage();
         int dir = rand.nextInt(4);
 
         switch (dir)
@@ -65,6 +69,7 @@ public class Path
         {
             curLocY -= 1;
             grid[curLocX][curLocY] = 2;
+	        length++;
 
             if (curLocX > 0 && curLocY < height - 1)
                 if (grid[curLocX - 1][curLocY + 1] == 0)
@@ -79,7 +84,18 @@ public class Path
                 if (grid[curLocX][curLocY + 2] == 0)
                     grid[curLocX][curLocY + 2] = 3;
 
+	        if (length >= maxLength)
+	        {
+		        if (curLocX > 0 && isOpen(curLocX - 1, curLocY))
+			        grid[curLocX - 1][curLocY] = 3;
+		        if (curLocX < width - 1 && isOpen(curLocX + 1, curLocY))
+			        grid[curLocX + 1][curLocY] = 3;
+		        if (curLocY > 0 && isOpen(curLocX, curLocY - 1))
+			        grid[curLocX][curLocY - 1] = 3;
+	        }
+
             lastDir = 0;
+	        runDebugAndExports();
         }
     }
 
@@ -89,6 +105,7 @@ public class Path
         {
             curLocX -= 1;
             grid[curLocX][curLocY] = 2;
+	        length++;
 
             if (curLocX < width - 1 && curLocY > 0 && grid[curLocX + 1][curLocY - 1] == 0)
                 grid[curLocX + 1][curLocY - 1] = 3;
@@ -101,7 +118,18 @@ public class Path
                 grid[curLocX + 2][curLocY] = 3;
             }
 
+	        if (length >= maxLength)
+	        {
+		        if (curLocY > 0 && isOpen(curLocX, curLocY - 1))
+			        grid[curLocX][curLocY - 1] = 3;
+		        if (curLocY < height - 1 && isOpen(curLocX, curLocY + 1))
+			        grid[curLocX][curLocY + 1] = 3;
+		        if (curLocX > 0 && isOpen(curLocX - 1, curLocY))
+			        grid[curLocX - 1][curLocY] = 3;
+	        }
+
             lastDir = 1;
+	        runDebugAndExports();
         }
     }
 
@@ -111,6 +139,7 @@ public class Path
         {
             curLocY += 1;
             grid[curLocX][curLocY] = 2;
+	        length++;
 
             if (curLocX > 0 && curLocY > 0 && grid[curLocX - 1][curLocY - 1] == 0)
                 grid[curLocX - 1][curLocY - 1] = 3;
@@ -123,7 +152,18 @@ public class Path
                 grid[curLocX][curLocY - 2] = 3;
             }
 
+	        if (length >= maxLength)
+	        {
+		        if (curLocX > 0 && isOpen(curLocX - 1, curLocY))
+			        grid[curLocX - 1][curLocY] = 3;
+		        if (curLocX < width - 1 && isOpen(curLocX + 1, curLocY))
+			        grid[curLocX + 1][curLocY] = 3;
+		        if (curLocY < height - 2 && isOpen(curLocX, curLocY + 1))
+			        grid[curLocX][curLocY + 1] = 3;
+	        }
+
             lastDir = 2;
+	        runDebugAndExports();
         }
 
     }
@@ -134,6 +174,7 @@ public class Path
         {
             curLocX += 1;
             grid[curLocX][curLocY] = 2;
+	        length++;
 
             if (curLocX > 0 && curLocY > 0 && grid[curLocX - 1][curLocY - 1] == 0)
                 grid[curLocX - 1][curLocY - 1] = 3;
@@ -146,7 +187,18 @@ public class Path
                 grid[curLocX - 2][curLocY] = 3;
             }
 
+	        if (length >= maxLength)
+	        {
+		        if (curLocY > 0 && isOpen(curLocX, curLocY - 1))
+			        grid[curLocX][curLocY - 1] = 3;
+		        if (curLocY < height - 1 && isOpen(curLocX, curLocY + 1))
+			        grid[curLocX][curLocY + 1] = 3;
+		        if (curLocX < width - 2 && isOpen(curLocX + 1, curLocY))
+			        grid[curLocX + 1][curLocY] = 3;
+	        }
+
             lastDir = 3;
+	        runDebugAndExports();
         }
     }
 
@@ -191,4 +243,14 @@ public class Path
             }
         }
     }
+
+	private void runDebugAndExports()
+	{
+		if (debug)
+			maze.printMaze();
+		if (toTxt)
+			maze.printMazeToTxt();
+		if (toPng)
+			maze.printMazeToImage();
+	}
 }
