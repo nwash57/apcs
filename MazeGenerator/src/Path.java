@@ -39,6 +39,7 @@ public class Path
     }
 
     private void move() {
+        maze.printMazeToImage();
         int dir = rand.nextInt(4);
 
         switch (dir)

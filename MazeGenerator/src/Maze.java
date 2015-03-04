@@ -1,3 +1,8 @@
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.Random;
 import java.util.ArrayList;
 
@@ -11,6 +16,8 @@ import java.util.ArrayList;
 
 public class Maze
 {
+    private int fileNum = 0;
+
     private Random rand = new Random();
     private int[][] grid;
     private int width, height;
@@ -63,7 +70,7 @@ public class Maze
 
 		    if (hasOpenSpace())
 		    {
-                printMaze();
+                //printMazeToTxt();
 			    selectNewHead();
 			    if (curLoc != null)
 			        fillGrid();
@@ -133,6 +140,111 @@ public class Maze
                 }
 
             }
+        }
+    }
+
+    public void printMazeToImage()
+    {
+        try
+        {
+            int lineMultiplier = 1;
+            String s = String.format("%05d", fileNum);
+
+            StringBuilder sb2 = new StringBuilder();
+            sb2.append("maze-");
+            sb2.append(s);
+            sb2.append(".png");
+
+            StringBuilder sb = new StringBuilder();
+            BufferedImage bi = new BufferedImage(1080, 1080, BufferedImage.TYPE_3BYTE_BGR);
+            Graphics2D g = bi.createGraphics();
+            g.setFont(new Font("Monospaced", Font.PLAIN, 12));
+
+            for (int i = 0; i < height; i++)
+            {
+                sb = new StringBuilder();
+
+                for (int j = 0; j < width; j++)
+                {
+                    switch (grid[j][i])
+                    {
+                        case -1:
+                            sb.append(" $");
+                            break;
+                        case 0:
+                            sb.append(" .");
+                            break;
+                        case 1:
+                            sb.append(" @");
+                            break;
+                        case 2:
+                            sb.append("  ");
+                            break;
+                        case 3:
+                            sb.append(" #");
+                            break;
+                    }
+                }
+                g.drawString(sb.toString(), 17, 15 * lineMultiplier);
+                lineMultiplier++;
+            }
+
+            fileNum++;
+
+
+
+            ImageIO.write(bi, "PNG", new File("/home/nathan/IdeaProjects/apcs/MazeGenerator/png_output/" + sb2.toString()));
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    public void printMazeToTxt()
+    {
+        try
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.append("maze-");
+            String s = String.format("%03d", fileNum);
+            sb.append(s);
+            sb.append(".txt");
+
+            BufferedWriter w = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream("/home/nathan/IdeaProjects/apcs/MazeGenerator/txt_output/" + sb.toString()), "utf-8"));
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    switch (grid[j][i])
+                    {
+                        case -1:
+                            w.write("$ ");
+                            break;
+                        case 0:
+                            w.write("  ");
+                            break;
+                        case 1:
+                            w.write("@ ");
+                            break;
+                        case 2:
+                            w.write("+ ");
+                            break;
+                        case 3:
+                            w.write("# ");
+                            break;
+                    }
+                }
+                w.newLine();
+            }
+            w.close();
+            fileNum++;
+        }
+        catch (Exception e)
+        {
+
         }
     }
 

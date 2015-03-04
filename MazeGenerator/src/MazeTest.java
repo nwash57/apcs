@@ -4,7 +4,7 @@ public class MazeTest
 {
     public static void main(String[] args)
     {
-        Maze m = new Maze(400, 400);
+        Maze m = new Maze(50, 50);
         m.generateGrid();
         m.fillGrid();
 	    m.fillExtraPath();
