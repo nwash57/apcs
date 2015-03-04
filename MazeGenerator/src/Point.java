@@ -27,19 +27,16 @@ public class Point
 
     public int getUp()
     {
-
         return grid[x][y - 1];
     }
 
     public int getLeft()
     {
-
         return grid[x - 1][y];
     }
 
     public int getDown()
     {
-
         return grid[x][y + 1];
     }
 

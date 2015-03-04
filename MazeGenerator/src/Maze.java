@@ -63,6 +63,7 @@ public class Maze
 
 		    if (hasOpenSpace())
 		    {
+                printMaze();
 			    selectNewHead();
 			    if (curLoc != null)
 			        fillGrid();

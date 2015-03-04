@@ -2,7 +2,7 @@ public class MazeTest
 {
     public static void main(String[] args)
     {
-        Maze m = new Maze(16, 16);
+        Maze m = new Maze(400, 400);
         m.generateGrid();
         m.fillGrid();
 	    m.fillExtraPath();

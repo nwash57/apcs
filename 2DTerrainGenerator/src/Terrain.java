@@ -9,8 +9,11 @@ import java.util.Random;
 
 public class Terrain
 {
+    private Random rand = new Random();
+
     private int width, height, maxHeight, minHeight, currentHeight;
     private Point[] grid;
+    private Point lastPoint;
 
     private ArrayList<Point> openPoints = new ArrayList<Point>();
     private ArrayList<Point> groundPoints= new ArrayList<Point>();
@@ -36,9 +39,51 @@ public class Terrain
                 i++;
             }
         }
+
+        for (Point p : grid)
+            openPoints.add(p);
     }
 
-    
+    public void initiate()
+    {
+        int initialHeight = rand.nextInt(height);
+
+        for (Point p : grid)
+        {
+            if (p.getX() == 0 && p.getY() == initialHeight)
+                setGroundPoint(p);
+        }
+    }
+
+    public void getNextTile()
+    {
+        for (Point p : grid)
+            if (p.getX() == (lastPoint.getX() + 1) && p.getY() == (lastPoint.getY() + upOrDown()))
+            {
+                setGroundPoint(p);
+                break;
+            }
+    }
+
+    private void setGroundPoint(Point p)
+    {
+        p.setType(-1);
+        openPoints.remove(p);
+        groundPoints.add(p);
+        lastPoint = p;
+    }
+
+    private int upOrDown()
+    {
+        int i;
+        boolean b = rand.nextBoolean();
+
+        if (b)
+            i = 1;
+        else i = -1;
+
+        return i;
+    }
 
     public void printTerrain()
     {
