@@ -26,6 +26,8 @@ public class Maze
 
 	private boolean debug, toTxt, toPng;
 
+	public int frameNum = 0;
+
     public Maze(int iWidth, int iHeight, int iPathLength, boolean d, boolean txt, boolean png)
     {
         width = iWidth;
@@ -198,8 +200,6 @@ public class Maze
 
             fileNum++;
 
-
-
             ImageIO.write(bi, "PNG", new File("/home/nathan/IdeaProjects/apcs/MazeGenerator/png_output/" + sb2.toString()));
         }
         catch (Exception e)
@@ -342,6 +342,26 @@ public class Maze
 
         return b;
     }
+
+	public double percentLoaded()
+	{
+		double area = width * height;
+		double closed = 0;
+		double percent = 0;
+
+		for (int y = 0; y < height; y++)
+			for (int x = 0; x < width; x++)
+			{
+				Point p = new Point(x, y, grid);
+				if (p.getType() != 0)
+				{
+					closed++;
+					percent = (closed * 100)/ area;
+				}
+			}
+		//System.out.println("test: " + (int)percent);
+		return percent;
+	}
 
     private boolean hasAdjacentOpen(Point p)
     {

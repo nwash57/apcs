@@ -10,6 +10,8 @@ public class Path
     private int[][] grid;
 	private boolean debug, toTxt, toPng;
 
+	private int lastPercent = 0;
+
     public Path(Point head, int gridWidth, int gridHeight, int ml, int[][] iGrid, Maze m, boolean d, boolean txt, boolean png)
     {
         maze = m;
@@ -70,6 +72,7 @@ public class Path
             curLocY -= 1;
             grid[curLocX][curLocY] = 2;
 	        length++;
+	        maze.frameNum++;
 
             if (curLocX > 0 && curLocY < height - 1)
                 if (grid[curLocX - 1][curLocY + 1] == 0)
@@ -96,6 +99,7 @@ public class Path
 
             lastDir = 0;
 	        runDebugAndExports();
+	        loading();
         }
     }
 
@@ -106,6 +110,7 @@ public class Path
             curLocX -= 1;
             grid[curLocX][curLocY] = 2;
 	        length++;
+	        maze.frameNum++;
 
             if (curLocX < width - 1 && curLocY > 0 && grid[curLocX + 1][curLocY - 1] == 0)
                 grid[curLocX + 1][curLocY - 1] = 3;
@@ -130,6 +135,7 @@ public class Path
 
             lastDir = 1;
 	        runDebugAndExports();
+	        loading();
         }
     }
 
@@ -140,6 +146,7 @@ public class Path
             curLocY += 1;
             grid[curLocX][curLocY] = 2;
 	        length++;
+	        maze.frameNum++;
 
             if (curLocX > 0 && curLocY > 0 && grid[curLocX - 1][curLocY - 1] == 0)
                 grid[curLocX - 1][curLocY - 1] = 3;
@@ -164,8 +171,8 @@ public class Path
 
             lastDir = 2;
 	        runDebugAndExports();
+	        loading();
         }
-
     }
 
     private void moveRight()
@@ -175,6 +182,7 @@ public class Path
             curLocX += 1;
             grid[curLocX][curLocY] = 2;
 	        length++;
+	        maze.frameNum++;
 
             if (curLocX > 0 && curLocY > 0 && grid[curLocX - 1][curLocY - 1] == 0)
                 grid[curLocX - 1][curLocY - 1] = 3;
@@ -199,6 +207,7 @@ public class Path
 
             lastDir = 3;
 	        runDebugAndExports();
+	        loading();
         }
     }
 
@@ -252,5 +261,20 @@ public class Path
 			maze.printMazeToTxt();
 		if (toPng)
 			maze.printMazeToImage();
+	}
+
+	private void loading()
+	{
+		if (lastPercent < (int)maze.percentLoaded())
+		{
+			int dotsNeeded = (int)maze.percentLoaded();
+			dotsNeeded -= lastPercent;
+			lastPercent = (int)maze.percentLoaded();
+
+			for (int i = 0; i < dotsNeeded; i++)
+			{
+				System.out.print(".");
+			}
+		}
 	}
 }

@@ -1,7 +1,5 @@
 //this is a test
 
-import java.util.Scanner;
-
 public class MazeTest
 {
     public static void main(String[] args)
@@ -17,19 +15,12 @@ public class MazeTest
 	    ms[0] = false;
 	    ms[1] = false;
 	    ms[2] = false;
-	    ms[3] = false;
-	    ms[4] = false;
+	    ms[3] = true;
+	    ms[4] = true;
 
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Enter grid width: ");
-        int width = scan.nextInt();
-        System.out.println("Enter grid height: ");
-        int height = scan.nextInt();
-        System.out.println("Enter maximum path length: ");
-        int pathLength = scan.nextInt();
-        System.out.println();
-
-        Maze m = new Maze(width, height, pathLength, ms[0], ms[1], ms[2]);
+	    System.out.println("loading|....................................................................................................|");
+	    System.out.print("       |");
+        Maze m = new Maze(300, 300, 5, ms[0], ms[1], ms[2]);
         m.generateGrid();
         m.fillGrid();
 	    m.fillExtraPath();
