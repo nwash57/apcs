@@ -166,7 +166,7 @@ public class Maze
             sb2.append(".png");
 
             StringBuilder sb = new StringBuilder();
-            BufferedImage bi = new BufferedImage(1080, 1080, BufferedImage.TYPE_3BYTE_BGR);
+            BufferedImage bi = new BufferedImage(15 + (15 * width), 15 + (15 * height), BufferedImage.TYPE_3BYTE_BGR);
             Graphics2D g = bi.createGraphics();
             g.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
@@ -195,7 +195,7 @@ public class Maze
                             break;
                     }
                 }
-                g.drawString(sb.toString(), 17, 15 * lineMultiplier);
+                g.drawString(sb.toString(), 15, 15 * lineMultiplier);
                 lineMultiplier++;
             }
 
@@ -232,13 +232,13 @@ public class Maze
                             w.write("$ ");
                             break;
                         case 0:
-                            w.write("  ");
+                            w.write(". ");
                             break;
                         case 1:
                             w.write("@ ");
                             break;
                         case 2:
-                            w.write("+ ");
+                            w.write("  ");
                             break;
                         case 3:
                             w.write("# ");

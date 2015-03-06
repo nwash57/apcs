@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Arrays;
 
 /* GRID KEY
  * -1 = ground
@@ -57,12 +58,21 @@ public class Terrain
 
     public void getNextTile()
     {
-        for (Point p : grid)
-            if (p.getX() == (lastPoint.getX() + 1) && p.getY() == (lastPoint.getY() + upOrDown()))
-            {
-                setGroundPoint(p);
-                break;
-            }
+//        for (Point p : grid)
+//            if (p.getX() == (lastPoint.getX() + 1) && p.getY() == (lastPoint.getY() + upOrDown()))
+//            {
+//                setGroundPoint(p);
+//                break;
+//            }
+        Point p = null;
+        if (lastPoint.getX() < width - 1 && lastPoint.getY() > 0 && lastPoint.getY() < height - 1)
+            p = new Point(lastPoint.getX() + 1, lastPoint.getY() + upOrDown());
+        else if (lastPoint.getX() < width - 1 && lastPoint.getY() > 0)
+            p = new Point(lastPoint.getX() + 1, lastPoint.getY() - 1);
+        else if (lastPoint.getX() < width - 1 && lastPoint.getY() < height - 1)
+            p = new Point(lastPoint.getX() + 1, lastPoint.getY() + 1);
+
+        setGroundPoint(grid[Arrays.asList(grid).indexOf(p)]);
     }
 
     private void setGroundPoint(Point p)

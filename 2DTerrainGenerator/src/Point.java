@@ -38,6 +38,14 @@ public class Point
         return s;
     }
 
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof Point))
+            return false;
+        Point p = (Point)o;
+        return (this.getX() == p.getX() && this.getY() == p.getY());
+    }
+
     public void setType(int t)
     {
         type = t;

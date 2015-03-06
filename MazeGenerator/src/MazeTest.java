@@ -14,7 +14,7 @@ public class MazeTest
 	    boolean[] ms = new boolean[5];
 	    ms[0] = false;
 	    ms[1] = false;
-	    ms[2] = false;
+	    ms[2] = true;
 	    ms[3] = true;
 	    ms[4] = true;
 
