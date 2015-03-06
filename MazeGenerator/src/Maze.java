@@ -27,6 +27,7 @@ public class Maze
 	private boolean debug, toTxt, toPng;
 
 	public int frameNum = 0;
+    public int lastPercent = 0;
 
     public Maze(int iWidth, int iHeight, int iPathLength, boolean d, boolean txt, boolean png)
     {

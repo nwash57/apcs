@@ -10,8 +10,6 @@ public class Path
     private int[][] grid;
 	private boolean debug, toTxt, toPng;
 
-	private int lastPercent = 0;
-
     public Path(Point head, int gridWidth, int gridHeight, int ml, int[][] iGrid, Maze m, boolean d, boolean txt, boolean png)
     {
         maze = m;
@@ -265,16 +263,18 @@ public class Path
 
 	private void loading()
 	{
-		if (lastPercent < (int)maze.percentLoaded())
-		{
-			int dotsNeeded = (int)maze.percentLoaded();
-			dotsNeeded -= lastPercent;
-			lastPercent = (int)maze.percentLoaded();
+		int dotsNeeded = (int)maze.percentLoaded();
+        //System.out.print("dn: " + dotsNeeded + " lp: " + maze.lastPercent);
+		dotsNeeded -= maze.lastPercent;
+        //System.out.print(" dnn: " + dotsNeeded);
 
-			for (int i = 0; i < dotsNeeded; i++)
-			{
-				System.out.print(".");
-			}
+		maze.lastPercent = (int)maze.percentLoaded();
+        //System.out.println(" lpn: " + maze.lastPercent);
+
+		for (int i = 0; i < dotsNeeded; i++)
+		{
+			System.out.print(".");
 		}
+
 	}
 }
