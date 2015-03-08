@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 
 public class Path
@@ -5,20 +6,19 @@ public class Path
     private Random rand = new Random();
     private Maze maze;
     private int length, maxLength, lastDir, height, width;
-    private int curLocX, curLocY;
+    private int curLoc;
     private boolean generating;
-    private int[][] grid;
+    private Point[] grid;
 	private boolean debug, toTxt, toPng;
 
-    public Path(Point head, int gridWidth, int gridHeight, int ml, int[][] iGrid, Maze m, boolean d, boolean txt, boolean png)
+    public Path(Point head, int gridWidth, int gridHeight, int ml, Point[] iGrid, Maze m, boolean d, boolean txt, boolean png)
     {
         maze = m;
-        curLocX = head.getX();
-        curLocY = head.getY();
         generating = true;
         lastDir = -1;
         length = 1;
         grid = iGrid;
+        curLoc = Arrays.asList(grid).indexOf(head);
         height = gridHeight;
         width = gridWidth;
 	    maxLength = ml;
@@ -65,34 +65,31 @@ public class Path
 
     private void moveUp()
     {
-        if (isOpen(curLocX, curLocY - 1))
+        if (grid[up()].isType(0))
         {
-            curLocY -= 1;
-            grid[curLocX][curLocY] = 2;
+            curLoc = up();
+            grid[curLoc].setType(2);
 	        length++;
 	        maze.frameNum++;
 
-            if (curLocX > 0 && curLocY < height - 1)
-                if (grid[curLocX - 1][curLocY + 1] == 0)
-                    grid[curLocX - 1][curLocY + 1] = 3;
+            if (grid[curLoc].getX() > 0 && grid[curLoc].getY() < height - 1 && grid[downLeft()].isType(0))
+                grid[downLeft()].setType(3);
 
 
-            if (curLocX < width - 1 && curLocY < height - 1)
-                if (grid[curLocX + 1][curLocY + 1] == 0)
-                    grid[curLocX + 1][curLocY + 1] = 3;
+            if (grid[curLoc].getX() < width - 1 && grid[curLoc].getY() < height - 1 && grid[downRight()].isType(0))
+                grid[downRight()].setType(3);
 
-            if (curLocY < height - 2 && lastDir != 0 && lastDir != -1)
-                if (grid[curLocX][curLocY + 2] == 0)
-                    grid[curLocX][curLocY + 2] = 3;
+            if (grid[curLoc].getY() < height - 2 && lastDir != 0 && lastDir != -1 && grid[downTwo()].isType(0))
+                grid[downTwo()].setType(3);
 
 	        if (length >= maxLength)
 	        {
-		        if (curLocX > 0 && isOpen(curLocX - 1, curLocY))
-			        grid[curLocX - 1][curLocY] = 3;
-		        if (curLocX < width - 1 && isOpen(curLocX + 1, curLocY))
-			        grid[curLocX + 1][curLocY] = 3;
-		        if (curLocY > 0 && isOpen(curLocX, curLocY - 1))
-			        grid[curLocX][curLocY - 1] = 3;
+		        if (grid[curLoc].getX() > 0 && grid[left()].isType(0))
+			        grid[left()].setType(3);
+		        if (grid[curLoc].getX() < width - 1 && grid[right()].isType(0))
+			        grid[right()].setType(3);
+		        if (grid[curLoc].getY() > 0 && grid[up()].isType(0))
+			        grid[up()].setType(3);
 	        }
 
             lastDir = 0;
@@ -103,32 +100,32 @@ public class Path
 
     private void moveLeft()
     {
-        if (isOpen(curLocX - 1, curLocY))
+        if (grid[left()].isType(0))
         {
-            curLocX -= 1;
-            grid[curLocX][curLocY] = 2;
+            curLoc = left();
+            grid[curLoc].setType(2);
 	        length++;
 	        maze.frameNum++;
 
-            if (curLocX < width - 1 && curLocY > 0 && grid[curLocX + 1][curLocY - 1] == 0)
-                grid[curLocX + 1][curLocY - 1] = 3;
+            if (grid[curLoc].getX() < width - 1 && grid[curLoc].getY() > 0 && grid[upRight()].isType(0))
+                grid[upRight()].setType(3);
 
-            if (curLocX < width - 1 && curLocY < height - 1 && grid[curLocX + 1][curLocY + 1] == 0)
-                grid[curLocX + 1][curLocY + 1] = 3;
+            if (grid[curLoc].getX() < width - 1 && grid[curLoc].getY() < height - 1 && grid[downRight()].isType(0))
+                grid[downRight()].setType(3);
 
-            if (curLocX < width - 2 && lastDir != 1 && grid[curLocX + 2][curLocY] == 0 && lastDir != -1)
+            if (grid[curLoc].getX() < width - 2 && lastDir != 1 && grid[leftTwo()].isType(0) && lastDir != -1)
             {
-                grid[curLocX + 2][curLocY] = 3;
+                grid[leftTwo()].setType(3);
             }
 
 	        if (length >= maxLength)
 	        {
-		        if (curLocY > 0 && isOpen(curLocX, curLocY - 1))
-			        grid[curLocX][curLocY - 1] = 3;
-		        if (curLocY < height - 1 && isOpen(curLocX, curLocY + 1))
-			        grid[curLocX][curLocY + 1] = 3;
-		        if (curLocX > 0 && isOpen(curLocX - 1, curLocY))
-			        grid[curLocX - 1][curLocY] = 3;
+		        if (grid[curLoc].getY() > 0 && grid[up()].isType(0))
+			        grid[up()].setType(3);
+		        if (grid[curLoc].getY() < height - 1 && grid[down()].isType(0))
+			        grid[up()].setType(3);
+		        if (grid[curLoc].getX() > 0 && grid[left()].isType(0))
+			        grid[left()].setType(3);
 	        }
 
             lastDir = 1;
@@ -139,32 +136,30 @@ public class Path
 
     private void moveDown()
     {
-        if (isOpen(curLocX, curLocY + 1))
+        if (grid[down()].isType(0))
         {
-            curLocY += 1;
-            grid[curLocX][curLocY] = 2;
+            curLoc = down();
+            grid[curLoc].setType(2);
 	        length++;
 	        maze.frameNum++;
 
-            if (curLocX > 0 && curLocY > 0 && grid[curLocX - 1][curLocY - 1] == 0)
-                grid[curLocX - 1][curLocY - 1] = 3;
+            if (grid[curLoc].getX() > 0 && grid[curLoc].getY() > 0 && grid[upLeft()].isType(0))
+                grid[upLeft()].setType(3);
 
-            if (curLocX < height - 1 && curLocY > 0 && grid[curLocX + 1][curLocY - 1] == 0)
-                grid[curLocX + 1][curLocY - 1] = 3;
+            if (grid[curLoc].getX() < height - 1 && grid[curLoc].getY() > 0 && grid[upRight()].isType(0))
+                grid[upRight()].setType(3);
 
-            if (curLocY > 1 && lastDir != 2 && grid[curLocX][curLocY - 2] == 0 && lastDir != -1)
-            {
-                grid[curLocX][curLocY - 2] = 3;
-            }
+            if (grid[curLoc].getY() > 1 && lastDir != 2 && grid[upTwo()].isType(0) && lastDir != -1)
+                grid[upTwo()].setType(3);
 
 	        if (length >= maxLength)
 	        {
-		        if (curLocX > 0 && isOpen(curLocX - 1, curLocY))
-			        grid[curLocX - 1][curLocY] = 3;
-		        if (curLocX < width - 1 && isOpen(curLocX + 1, curLocY))
-			        grid[curLocX + 1][curLocY] = 3;
-		        if (curLocY < height - 2 && isOpen(curLocX, curLocY + 1))
-			        grid[curLocX][curLocY + 1] = 3;
+		        if (grid[curLoc].getX() > 0 && grid[left()].isType(0))
+			        grid[left()].setType(3);
+		        if (grid[curLoc].getX() < width - 1 && grid[right()].isType(0))
+			        grid[right()].setType(3);
+		        if (grid[curLoc].getY() < height - 2 && grid[down()].isType(0))
+			        grid[right()].setType(3);
 	        }
 
             lastDir = 2;
@@ -175,32 +170,30 @@ public class Path
 
     private void moveRight()
     {
-        if (isOpen(curLocX + 1, curLocY))
+        if (grid[right()].isType(0))
         {
-            curLocX += 1;
-            grid[curLocX][curLocY] = 2;
+            curLoc = right();
+            grid[curLoc].setType(2);
 	        length++;
 	        maze.frameNum++;
 
-            if (curLocX > 0 && curLocY > 0 && grid[curLocX - 1][curLocY - 1] == 0)
-                grid[curLocX - 1][curLocY - 1] = 3;
+            if (grid[curLoc].getX() > 0 && grid[curLoc].getY() > 0 && grid[upLeft()].isType(0))
+                grid[upLeft()].setType(3);
 
-            if (curLocX > 0 && curLocY < height - 1 && grid[curLocX - 1][curLocY + 1] == 0)
-                grid[curLocX - 1][curLocY + 1] = 3;
+            if (grid[curLoc].getX() > 0 && grid[curLoc].getY() < height - 1 && grid[downLeft()].isType(0))
+                grid[downLeft()].setType(3);
 
-            if (curLocX > 1 && lastDir != 3 && grid[curLocX - 2][curLocY] == 0 && lastDir != -1)
-            {
-                grid[curLocX - 2][curLocY] = 3;
-            }
+            if (grid[curLoc].getX() > 1 && lastDir != 3 && grid[leftTwo()].isType(0) && lastDir != -1)
+                grid[leftTwo()].setType(3);
 
 	        if (length >= maxLength)
 	        {
-		        if (curLocY > 0 && isOpen(curLocX, curLocY - 1))
-			        grid[curLocX][curLocY - 1] = 3;
-		        if (curLocY < height - 1 && isOpen(curLocX, curLocY + 1))
-			        grid[curLocX][curLocY + 1] = 3;
-		        if (curLocX < width - 2 && isOpen(curLocX + 1, curLocY))
-			        grid[curLocX + 1][curLocY] = 3;
+		        if (grid[curLoc].getY() > 0 && grid[up()].isType(0))
+			        grid[up()].setType(3);
+		        if (grid[curLoc].getY() < height - 1 && grid[down()].isType(0))
+			        grid[right()].setType(3);
+		        if (grid[curLoc].getX() < width - 2 && grid[right()].isType(0))
+			        grid[right()].setType(3);
 	        }
 
             lastDir = 3;
@@ -209,31 +202,18 @@ public class Path
         }
     }
 
-    public boolean isOpen(int x, int y)
-    {
-        boolean b = false;
-
-        if (x >= 0 && x < width && y >= 0 && y < height)
-        {
-            if (grid[x][y] == 0)
-                b = true;
-            else b = false;
-        }
-        return b;
-    }
-
     private boolean isTrapped()
     {
-        if (!isOpen(curLocX + 1, curLocY) && !isOpen(curLocX - 1, curLocY) && !isOpen(curLocX, curLocY + 1) && !isOpen(curLocX, curLocY - 1))
+        if (!grid[right()].isType(0) && !grid[left()].isType(0) && !grid[down()].isType(0) && !grid[up()].isType(0))
             return true;
         else return false;
     }
 
     private void setGenerating()
     {
-        if (curLocX > 0)
+        if (grid[curLoc].getX() > 0)
         {
-            if (grid[curLocX - 1][curLocY] == -1)
+            if (grid[left()].isType(-1))
             {
                 generating = false;
             } else generating = true;
@@ -241,9 +221,9 @@ public class Path
 
         if (generating)
         {
-            if (curLocY > 0)
+            if (grid[curLoc].getY() > 0)
             {
-                if (grid[curLocX][curLocY - 1] == -1)
+                if (grid[up()].isType(-1))
                 {
                     generating = false;
                 } else generating = true;
@@ -277,4 +257,17 @@ public class Path
 		}
 
 	}
+    
+    private int up() { return curLoc - width; }
+    private int left() { return curLoc - 1; }
+    private int down() { return curLoc + width; }
+    private int right() { return curLoc + 1; }
+    private int upLeft() { return curLoc - 1 - width; }
+    private int upRight() { return curLoc + 1 - width; }
+    private int downLeft() { return curLoc - 1 + width; }
+    private int downRight() { return curLoc + 1 + width; }
+    private int upTwo() { return curLoc - (2 * width); }
+    private int leftTwo() { return curLoc - 2; }
+    private int downTwo() { return curLoc + (2 * width); }
+    private int rightTwo() { return curLoc + 2; }
 }

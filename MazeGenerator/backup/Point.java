@@ -1,9 +1,7 @@
-import java.util.Arrays;
-
 public class Point
 {
     private int x, y;
-    private Point[] grid;
+    private int[][] grid;
     private int type;
 
     public Point(int iX, int iY)
@@ -11,6 +9,13 @@ public class Point
         x = iX;
         y = iY;
         type = 0;
+    }
+
+    public Point(int iX, int iY, int[][] iGrid)
+    {
+        x = iX;
+        y = iY;
+        grid = iGrid;
     }
 
     public String toString()
@@ -46,12 +51,6 @@ public class Point
         type = t;
     }
 
-    public boolean isType(int t)
-    {
-        if (type == t) return true;
-        else return false;
-    }
-
     public int getX()
     {
         return x;
@@ -67,43 +66,43 @@ public class Point
         return type;
     }
 
-    public Point getUp()
+    public int getUp()
     {
-        return grid[Arrays.asList(grid).indexOf(new Point(x, y - 1))];
+        return grid[x][y - 1];
     }
 
-    public Point getLeft()
+    public int getLeft()
     {
-        return grid[Arrays.asList(grid).indexOf(new Point(x - 1, y))];
+        return grid[x - 1][y];
     }
 
-    public Point getDown()
+    public int getDown()
     {
-        return grid[Arrays.asList(grid).indexOf(new Point(x, y + 1))];
+        return grid[x][y + 1];
     }
 
-    public Point getRight()
+    public int getRight()
     {
-        return grid[Arrays.asList(grid).indexOf(new Point(x + 1, y))];
+        return grid[x + 1][y];
     }
 
-    public Point getUpLeft()
+    public int getUpLeft()
     {
-        return grid[Arrays.asList(grid).indexOf(new Point(x - 1, y - 1))];
+        return grid[x - 1][y - 1];
     }
 
-    public Point getUpRight()
+    public int getUpRight()
     {
-        return grid[Arrays.asList(grid).indexOf(new Point(x + 1, y - 1))];
+        return grid[x + 1][y - 1];
     }
 
-    public Point getDownLeft()
+    public int getDownLeft()
     {
-        return grid[Arrays.asList(grid).indexOf(new Point(x - 1, y + 1))];
+        return grid[x - 1][y + 1];
     }
 
-    public Point getDownRight()
+    public int getDownRight()
     {
-        return grid[Arrays.asList(grid).indexOf(new Point(x + 1, y + 1))];
+        return grid[x + 1][y + 1];
     }
 }

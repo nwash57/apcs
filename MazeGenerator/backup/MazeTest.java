@@ -20,7 +20,7 @@ public class MazeTest
 
 	    System.out.println("loading|....................................................................................................|");
 	    System.out.print("       |");
-        Maze m = new Maze(300, 300, 15, ms[0], ms[1], ms[2]);
+        Maze m = new Maze(300, 300, 5, ms[0], ms[1], ms[2]);
         m.generateGrid();
         m.fillGrid();
 	    m.fillExtraPath();

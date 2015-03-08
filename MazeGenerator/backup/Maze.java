@@ -19,7 +19,7 @@ public class Maze
     private int fileNum = 0;
 
     private Random rand = new Random();
-    private Point[] grid;
+    private int[][] grid;
     private int width, height;
 	private int pathLength;
     private Point curLoc;
@@ -34,7 +34,7 @@ public class Maze
         width = iWidth;
         height = iHeight;
 	    pathLength = iPathLength;
-        grid = new Point[width * height];
+        grid = new int[width][height];
 	    debug = d;
 	    toTxt = txt;
 	    toPng = png;
@@ -43,8 +43,8 @@ public class Maze
     public void generateGrid()
     {
         generateStart();
-        curLoc.setType(1);
-        grid[0].setType(-1);
+        grid[curLoc.getX()][curLoc.getY()] = 1;
+        grid[0][0] = -1;
     }
 
     private void generateStart()
@@ -67,7 +67,7 @@ public class Maze
                 break;
         }
 
-        curLoc = new Point(x, y);
+        curLoc = new Point(x, y, grid);
     }
 
     public void fillGrid()
