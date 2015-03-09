@@ -11,14 +11,14 @@ public class Path
     private Point[] grid;
 	private boolean debug, toTxt, toPng;
 
-    public Path(Point head, int gridWidth, int gridHeight, int ml, Point[] iGrid, Maze m, boolean d, boolean txt, boolean png)
+    public Path(int head, int gridWidth, int gridHeight, int ml, Point[] iGrid, Maze m, boolean d, boolean txt, boolean png)
     {
         maze = m;
         generating = true;
         lastDir = -1;
         length = 1;
         grid = iGrid;
-        curLoc = Arrays.asList(grid).indexOf(head);
+        curLoc = head;
         height = gridHeight;
         width = gridWidth;
 	    maxLength = ml;
@@ -257,6 +257,8 @@ public class Path
 		}
 
 	}
+
+
     
     private int up() { return curLoc - width; }
     private int left() { return curLoc - 1; }

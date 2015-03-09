@@ -52,6 +52,71 @@ public class Point
         else return false;
     }
 
+	public boolean hasAdjacentOpen(Point p)
+	{
+		boolean b = false;
+		int x = p.getX();
+		int y = p.getY();
+
+		////////////////////////////////////////////////
+		//ANY SPACE THAT IS NOT A CORNER OR SIDE
+		////////////////////////////////////////////////
+		if (x > 0 && x < width - 1 && y > 0 && y < height - 1)
+		{
+			if (grid[up()].isType(0) || p.getDown() == 0 || p.getLeft() == 0 || p.getRight() == 0)
+				b = true;
+		}
+
+		////////////////////////////////////////////////
+		//ANY SPACE THAT IS A SIDE && NOT A CORNER
+		////////////////////////////////////////////////
+		else if (y == 0 && x > 0 && x < width - 1)
+		{
+			if (p.getDown() == 0 || p.getLeft() == 0 || p.getRight() == 0)
+				b = true;
+		}
+		else if (x == 0 && y > 0 && y < height - 1)
+		{
+			if (grid[up()].isType(0) || p.getRight() == 0 || p.getDown() == 0)
+				b = true;
+		}
+		else if (y == height - 1 && x > 0 && x < width - 1)
+		{
+			if (grid[up()].isType(0) || p.getRight() == 0 || p.getLeft() == 0)
+				b = true;
+		}
+		else if (x == width - 1 && y > 0 && y < height - 1)
+		{
+			if (p.getLeft() == 0 || p.getDown() == 0 || grid[up()].isType(0))
+				b = true;
+		}
+
+		////////////////////////////////////////////////
+		//ANY SPACE THAT IS ONLY A CORNER
+		////////////////////////////////////////////////
+		else if (x == 0 && y == 0)
+		{
+			if (p.getRight() == 0 || p.getDown() == 0)
+				b = true;
+		}
+		else if (x == 0 && y == height - 1)
+		{
+			if (p.getRight() == 0 || grid[up()].isType(0))
+				b = true;
+		}
+		else if (x == width - 1 && y == 0)
+		{
+			if (p.getLeft() == 0 || p.getDown() == 0)
+				b = true;
+		}
+		else if (x == width - 1 && y == height - 1)
+		{
+			if (p.getLeft() == 0 || grid[up()].isType(0))
+				b = true;
+		}
+		return b;
+	}
+
     public int getX()
     {
         return x;
@@ -106,4 +171,17 @@ public class Point
     {
         return grid[Arrays.asList(grid).indexOf(new Point(x + 1, y + 1))];
     }
+
+	private int up() { return curLoc - width; }
+	private int left() { return curLoc - 1; }
+	private int down() { return curLoc + width; }
+	private int right() { return curLoc + 1; }
+	private int upLeft() { return curLoc - 1 - width; }
+	private int upRight() { return curLoc + 1 - width; }
+	private int downLeft() { return curLoc - 1 + width; }
+	private int downRight() { return curLoc + 1 + width; }
+	private int upTwo() { return curLoc - (2 * width); }
+	private int leftTwo() { return curLoc - 2; }
+	private int downTwo() { return curLoc + (2 * width); }
+	private int rightTwo() { return curLoc + 2; }
 }
